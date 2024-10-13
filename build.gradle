@@ -23,6 +23,6 @@ dependencies {
 }
 
 test {
-    systemProperty "BaseURL", "https://reqres.in/api"
+    systemProperty "BaseURL", System.getProperty("BaseURL");
     useTestNG()
 }
