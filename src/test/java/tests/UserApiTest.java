@@ -2,6 +2,7 @@ package tests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import model.CreateUserResponse;
 import model.User;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -75,26 +76,22 @@ public class UserApiTest {
     public void updateUser() {
         User user = new User("Georgi", "Cleaning guy");
 
-
         //Create the user that is going to be updated and get the id
-        Response response = RestAssured.given()
+        CreateUserResponse createdUser = RestAssured.given()
                 .contentType("application/json")
                 .body(user)
                 .when()
                 .post(USERS_END_POINT)
                 .then()
                 .extract()
-                .response();
-
-        user.setId(response.jsonPath().get("id"));
-
+                .as(CreateUserResponse.class);
 
         //Update the user
-        response = RestAssured.given()
+        Response response = RestAssured.given()
                 .contentType("application/json")
                 .body(user)
                 .when()
-                .put(USERS_END_POINT + "/" + user.getId())
+                .put(USERS_END_POINT + "/" + createdUser.getId())
                 .then()
                 .extract()
                 .response();
